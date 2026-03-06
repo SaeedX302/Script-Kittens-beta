@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 
 type Phase = 'loading' | 'ready' | 'launching' | 'done';
 
@@ -11,6 +11,7 @@ export default function Preloader() {
   const rafRef = useRef<number | null>(null);
   const startRef = useRef<number | null>(null);
   const launchButtonRef = useRef<HTMLButtonElement>(null);
+  const launchTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const LOAD_MS = 2000; // progress bar duration
 
   // Animate percentage counter
@@ -51,12 +52,26 @@ export default function Preloader() {
         (appRoot as HTMLElement).removeAttribute('aria-hidden');
       }
     }
+    // Always clean up on unmount so a non-happy-path unmount never leaves
+    // the app root permanently inert.
+    return () => {
+      const root = document.getElementById('__next') ?? document.querySelector('main');
+      if (root) {
+        (root as HTMLElement).removeAttribute('inert');
+        (root as HTMLElement).removeAttribute('aria-hidden');
+      }
+    };
   }, [phase]);
 
   const handleLaunch = () => {
     setPhase('launching');
-    // After exit animation completes, restore background and unmount
-    setTimeout(() => {
+    // Clear any previous launch timeout before scheduling a new one.
+    if (launchTimeoutRef.current !== null) {
+      clearTimeout(launchTimeoutRef.current);
+    }
+    // After exit animation completes, restore background and unmount.
+    launchTimeoutRef.current = setTimeout(() => {
+      launchTimeoutRef.current = null;
       setRemoved(true);
       const appRoot = document.getElementById('__next') ?? document.querySelector('main');
       if (appRoot) {
@@ -65,6 +80,25 @@ export default function Preloader() {
       }
     }, 1200);
   };
+
+  // Global unmount cleanup: cancel any in-flight timers / animation frames
+  // and null out DOM refs so stale closures cannot touch detached elements.
+  useEffect(() => {
+    return () => {
+      if (launchTimeoutRef.current !== null) {
+        clearTimeout(launchTimeoutRef.current);
+        launchTimeoutRef.current = null;
+      }
+      if (rafRef.current !== null) {
+        cancelAnimationFrame(rafRef.current);
+        rafRef.current = null;
+      }
+      startRef.current = null;
+      // launchButtonRef is a React-managed ref; setting to null here is a
+      // no-op safety measure against stale focus calls.
+      (launchButtonRef as React.MutableRefObject<HTMLButtonElement | null>).current = null;
+    };
+  }, []);
 
   if (removed) return null;
 

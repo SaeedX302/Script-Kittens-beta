@@ -107,14 +107,28 @@ export default function CustomCursor({ active }: Props) {
     applyDotStyle();
     applyTrailStyle();
 
-    window.addEventListener('mousemove', onMove, { passive: true });
-    window.addEventListener('mousedown', onDown);
-    window.addEventListener('mouseup',   onUp);
+    // Reset clicking state when the pointer is cancelled (e.g. touch stolen by
+    // scroll) or the window loses focus, so the cursor never stays "pressed".
+    const onCancel = () => {
+      if (!isClicking) return;
+      isClicking = false;
+      applyRingStyle();
+      applyDotStyle();
+      applyTrailStyle();
+    };
+
+    window.addEventListener('mousemove',    onMove,   { passive: true });
+    window.addEventListener('mousedown',    onDown);
+    window.addEventListener('mouseup',      onUp);
+    window.addEventListener('pointercancel', onCancel);
+    window.addEventListener('blur',          onCancel);
 
     return () => {
-      window.removeEventListener('mousemove', onMove);
-      window.removeEventListener('mousedown', onDown);
-      window.removeEventListener('mouseup',   onUp);
+      window.removeEventListener('mousemove',    onMove);
+      window.removeEventListener('mousedown',    onDown);
+      window.removeEventListener('mouseup',      onUp);
+      window.removeEventListener('pointercancel', onCancel);
+      window.removeEventListener('blur',          onCancel);
       cancelAnimationFrame(raf);
     };
   }, [active]);
