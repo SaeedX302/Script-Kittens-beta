@@ -1,62 +1,156 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import gsap from 'gsap';
+import { useEffect, useState, useRef } from 'react';
+
+type Phase = 'loading' | 'ready' | 'launching' | 'done';
 
 export default function Preloader() {
-  const [hasMounted, setHasMounted] = useState(false);
-  const [isVisible, setIsVisible] = useState(true);
+  const [phase, setPhase] = useState<Phase>('loading');
+  const [pct, setPct] = useState(0);
+  const [removed, setRemoved] = useState(false);
+  const rafRef = useRef<number | null>(null);
+  const startRef = useRef<number | null>(null);
+  const LOAD_MS = 2000; // progress bar duration
 
+  // Animate percentage counter
   useEffect(() => {
-    setHasMounted(true);
-
-    const timer = setTimeout(() => {
-      gsap.to('#preloader', {
-        opacity: 0,
-        duration: 0.8,
-        onComplete: () => setIsVisible(false)
-      });
-    }, 2800);
-
-    return () => clearTimeout(timer);
+    const animate = (now: number) => {
+      if (!startRef.current) startRef.current = now;
+      const p = Math.min(((now - startRef.current) / LOAD_MS) * 100, 100);
+      setPct(Math.floor(p));
+      if (p < 100) {
+        rafRef.current = requestAnimationFrame(animate);
+      } else {
+        setPhase('ready');
+      }
+    };
+    // Small delay so letters animate in first
+    const t = setTimeout(() => {
+      rafRef.current = requestAnimationFrame(animate);
+    }, 600);
+    return () => {
+      clearTimeout(t);
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    };
   }, []);
 
-  if (!hasMounted || !isVisible) return null;
+  const handleLaunch = () => {
+    setPhase('launching');
+    // After exit animation completes, unmount
+    setTimeout(() => setRemoved(true), 1200);
+  };
+
+  if (removed) return null;
+
+  const isLaunching = phase === 'launching';
+  const isReady = phase === 'ready';
 
   return (
-    <div id="preloader" className="fixed inset-0 bg-[#030305] z-[10000] flex items-center justify-center flex-col">
-      <div className="text-center flex flex-col items-center gap-10">
-        <div className="flex flex-col items-center gap-8 relative animate-[loaderFadeIn_0.6s_ease-out]">
-          <div className="flex gap-1.5 relative z-10">
-            <div className="absolute inset-[-25px] bg-[radial-gradient(ellipse_at_center,rgba(143,0,255,0.12),transparent_65%)] blur-[35px] animate-[loaderGlow_5s_ease-in-out_infinite] -z-10" />
-            
-            {'SCRIPT KITTENS'.split('').map((char, i) => (
-              <span 
-                key={i} 
-                className={`font-outfit text-[clamp(48px,9vw,90px)] font-black bg-clip-text text-transparent bg-[linear-gradient(135deg,#00f0ff_0%,#8f00ff_50%,#ff00a8_100%)] bg-[size:200%_200%] drop-shadow-[0_0_15px_rgba(143,0,255,0.3)] animate-[letterSlideIn_0.8s_cubic-bezier(0.34,1.56,0.64,1)_forwards,letterGradientShift_6s_ease-in-out_infinite] opacity-0 translate-y-[30px] scale-90 blur-[8px]`}
-                style={{ 
-                  animationDelay: `${i * 0.05}s, ${i * 0.2}s`,
-                  width: char === ' ' ? '24px' : 'auto'
-                }}
-              >
-                {char}
-              </span>
-            ))}
-          </div>
+    <div className={`pl-root${isLaunching ? ' pl-root--exit' : ''}`} aria-label="Loading screen">
 
-          <div className="flex items-center gap-5 relative opacity-0 translate-y-[10px] animate-[subtextFadeIn_0.8s_ease-out_0.7s_forwards]">
-            <span className="w-[50px] h-[1px] bg-gradient-to-r from-transparent via-purple-500/40 to-transparent" />
-            <span className="font-outfit text-[12px] font-semibold tracking-[3px] text-purple-500/70 uppercase animate-[labelPulse_2.5s_ease-in-out_infinite]">INITIALIZING</span>
-            <span className="w-[50px] h-[1px] bg-gradient-to-r from-transparent via-purple-500/40 to-transparent" />
-          </div>
+      {/* Animated grid overlay */}
+      <div className="pl-grid" />
 
-          <div className="w-[250px] relative opacity-0 translate-y-[10px] animate-[barFadeIn_0.8s_ease-out_0.9s_forwards]">
-            <div className="h-[3px] bg-white/10 rounded-full overflow-hidden relative">
-              <div className="h-full w-full bg-gradient-to-r from-[#8f00ff] to-[#ff00a8] rounded-full origin-left scale-x-0 animate-[loaderBarFill_2.5s_cubic-bezier(0.34,1.56,0.64,1)_forwards] shadow-[0_0_10px_rgba(143,0,255,0.4)]" />
-            </div>
+      {/* Corner bracket decorations */}
+      <div className="pl-corner pl-corner--tl" />
+      <div className="pl-corner pl-corner--tr" />
+      <div className="pl-corner pl-corner--bl" />
+      <div className="pl-corner pl-corner--br" />
+
+      {/* Scan line sweep */}
+      <div className="pl-scanline" />
+
+      {/* Side vertical lines */}
+      <div className="pl-vline pl-vline--l" />
+      <div className="pl-vline pl-vline--r" />
+
+      {/* Center content */}
+      <div className="pl-body">
+
+        {/* Cat GIF logo */}
+        <div className="pl-logo-wrap">
+          <div className="pl-logo-ring pl-logo-ring--outer" />
+          <div className="pl-logo-ring pl-logo-ring--inner" />
+          <div className="pl-logo-img-wrap">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="https://i.postimg.cc/sg838cbj/download-(7).gif"
+              alt="Script Kittens"
+              className="pl-logo-img"
+            />
           </div>
         </div>
+
+        {/* Brand name */}
+        <div className="pl-title-wrap">
+          {'SCRIPT KITTENS'.split('').map((char, i) => (
+            <span
+              key={i}
+              className="pl-letter"
+              style={{ animationDelay: `${i * 0.045}s`, width: char === ' ' ? '18px' : undefined }}
+            >
+              {char}
+            </span>
+          ))}
+        </div>
+
+        {/* Tagline */}
+        <p className="pl-tagline">Elite Free Fire Gaming Tools Studio</p>
+
+        {/* Progress section */}
+        <div className="pl-progress-wrap">
+          <div className="pl-progress-track">
+            <div className="pl-progress-fill" style={{ width: `${pct}%` }} />
+            <div className="pl-progress-glow" style={{ left: `${pct}%` }} />
+          </div>
+          <div className="pl-progress-labels">
+            <span className="pl-progress-status">
+              {phase === 'loading' && 'INITIALIZING SYSTEMS...'}
+              {phase === 'ready' && '✓ ALL SYSTEMS READY'}
+              {phase === 'launching' && '⚡ LAUNCHING...'}
+            </span>
+            <span className="pl-progress-pct">{pct}%</span>
+          </div>
+        </div>
+
+        {/* System checks */}
+        <div className="pl-checks">
+          {[
+            { label: 'STEALTH ENGINE',    delay: 0.2  },
+            { label: 'SECURITY LAYER',    delay: 0.5  },
+            { label: 'API GATEWAY',       delay: 0.9  },
+            { label: 'ANTI-DETECT CORE',  delay: 1.3  },
+          ].map((item) => (
+            <div key={item.label} className="pl-check-item" style={{ animationDelay: `${item.delay}s` }}>
+              <span className="pl-check-dot" />
+              <span className="pl-check-label">{item.label}</span>
+              <span className="pl-check-ok">ONLINE</span>
+            </div>
+          ))}
+        </div>
+
+        {/* Launch button */}
+        <button
+          className={`pl-launch-btn${isReady || isLaunching ? ' pl-launch-btn--visible' : ''}${isLaunching ? ' pl-launch-btn--firing' : ''}`}
+          onClick={handleLaunch}
+          disabled={!isReady}
+          aria-label="Launch site"
+        >
+          <span className="pl-btn-bg" />
+          <span className="pl-btn-shine" />
+          <span className="pl-btn-text">
+            {isLaunching ? '⚡ LAUNCHING' : '▶ LAUNCH SITE'}
+          </span>
+          <span className="pl-btn-border-top" />
+          <span className="pl-btn-border-bottom" />
+        </button>
+
       </div>
+
+      {/* Exit shutter panels */}
+      <div className="pl-shutter pl-shutter--top" />
+      <div className="pl-shutter pl-shutter--bottom" />
     </div>
   );
 }
+

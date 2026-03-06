@@ -42,41 +42,41 @@ export default function About() {
               Who We <span className="text-gradient">Are</span>
             </h2>
             <p className="section-subtitle mb-5">
-              <strong style={{ color: '#f0ede4', fontWeight: 600 }}>Script Kittens</strong> is a gaming tools studio built by gamers, for gamers.
+              <strong style={{ color: '#f0eeff', fontWeight: 600 }}>Script Kittens</strong> is a gaming tools studio built by gamers, for gamers.
               We craft premium Free Fire tools, mods, and utilities that give players the edge
               they need — clean, reliable, and always ahead of the curve.
             </p>
             <p className="section-subtitle mb-8">
-              What started as a solo passion project by <strong style={{ color: '#f0ede4', fontWeight: 600 }}>Furqan</strong> has grown into a
+              What started as a solo passion project by <strong style={{ color: '#f0eeff', fontWeight: 600 }}>Furqan</strong> has grown into a
               tight-knit crew of developers, designers, and community builders united by one mission:
               making gaming better for everyone.
             </p>
 
             {/* Stats row */}
             <div className="about-stats-row flex flex-wrap gap-10 pt-8"
-              style={{ borderTop: '1.5px dashed rgba(200,184,232,0.15)' }}>
+              style={{ borderTop: '1.5px dashed rgba(167,139,250,0.20)' }}>
               {[['10K+', 'Active Users'], ['50+', 'Tools Built'], ['24/7', 'Community']].map(([val, label]) => (
                 <div key={label} className="about-stat flex flex-col gap-1.5">
                   <span className="font-outfit text-[30px] font-extrabold text-gradient tracking-[-1px]">{val}</span>
                   <span className="font-jetbrains-mono text-[11px] font-bold uppercase tracking-[2px]"
-                    style={{ color: 'rgba(240,237,228,0.40)' }}>{label}</span>
+                    style={{ color: 'rgba(224,216,255,0.42)' }}>{label}</span>
                 </div>
               ))}
             </div>
           </div>
 
           {/* Right founder card */}
-          <div className="about-founder flex flex-col items-center gap-6">
+            <div className="about-founder flex flex-col items-center gap-6">
             <div className="sketch-corner relative w-full max-w-[360px] aspect-[4/5] overflow-hidden group"
               style={{
-                border: '1.5px solid rgba(200,184,232,0.18)',
-                borderRadius: '4px',
-                background: 'rgba(10,9,16,0.9)',
-                boxShadow: '5px 5px 0 rgba(200,184,232,0.08), 9px 9px 0 rgba(200,184,232,0.04)',
+                border: '1.5px solid rgba(167,139,250,0.22)',
+                borderRadius: '8px',
+                background: 'rgba(8,6,18,0.92)',
+                boxShadow: '0 8px 40px rgba(0,0,0,0.50), 0 0 0 1px rgba(124,58,237,0.10), 0 0 40px rgba(124,58,237,0.06)',
               }}>
-              {/* Top chalk line */}
-              <div className="absolute top-0 left-0 right-0 h-[1.5px] z-10"
-                style={{ background: 'linear-gradient(90deg, rgba(200,184,232,0.50), rgba(168,200,232,0.30), transparent)' }} />
+              {/* Top accent line */}
+              <div className="absolute top-0 left-0 right-0 h-[2px] z-10"
+                style={{ background: 'linear-gradient(90deg, rgba(167,139,250,0.70), rgba(96,165,250,0.50), transparent)', boxShadow: '0 0 12px rgba(124,58,237,0.4)' }} />
               <div className="absolute inset-0 z-10 pointer-events-none"
                 style={{ background: 'linear-gradient(to top, rgba(10,9,16,0.7) 0%, rgba(10,9,16,0.15) 40%, transparent 70%)' }} />
               <img
@@ -90,9 +90,9 @@ export default function About() {
             {/* Founder info */}
             <div className="text-center">
               <span className="font-jetbrains-mono text-[10px] font-bold uppercase tracking-[3px] block mb-2"
-                style={{ color: 'rgba(200,184,232,0.60)' }}>Founder</span>
-              <h3 className="font-outfit text-[26px] font-extrabold tracking-[-0.5px] mb-1" style={{ color: '#f0ede4' }}>Furqan</h3>
-              <p className="text-[13px] mb-5" style={{ color: 'rgba(240,237,228,0.55)' }}>Lead Developer & Visionary</p>
+                style={{ color: 'rgba(167,139,250,0.65)' }}>Founder</span>
+              <h3 className="font-outfit text-[26px] font-extrabold tracking-[-0.5px] mb-1" style={{ color: '#f0eeff' }}>Furqan</h3>
+              <p className="text-[13px] mb-5" style={{ color: 'rgba(224,216,255,0.55)' }}>Lead Developer &amp; Visionary</p>
               <div className="flex justify-center gap-2.5">
                 {[
                   { href: 'https://discord.gg/AqkdsPMU7M', icon: MessageCircle },
@@ -101,22 +101,22 @@ export default function About() {
                 ].map(({ href, icon: Icon }) => (
                   <a key={href} href={href} target="_blank" rel="noreferrer"
                     className="w-10 h-10 flex items-center justify-center transition-all duration-300"
-                    style={{ border: '1.5px solid rgba(200,184,232,0.18)', borderRadius: '3px', background: 'rgba(200,184,232,0.05)', color: 'rgba(240,237,228,0.50)', boxShadow: '2px 2px 0 rgba(200,184,232,0.08)' }}
+                    style={{ border: '1.5px solid rgba(167,139,250,0.20)', borderRadius: '6px', background: 'rgba(167,139,250,0.05)', color: 'rgba(224,216,255,0.55)', boxShadow: '0 0 12px rgba(124,58,237,0.06)' }}
                     onMouseEnter={e => {
                       const el = e.currentTarget as HTMLElement;
-                      el.style.borderColor = 'rgba(200,184,232,0.40)';
-                      el.style.color = '#c8b8e8';
-                      el.style.background = 'rgba(200,184,232,0.10)';
-                      el.style.transform = 'translate(-1px,-2px)';
-                      el.style.boxShadow = '3px 3px 0 rgba(200,184,232,0.15)';
+                      el.style.borderColor = 'rgba(167,139,250,0.50)';
+                      el.style.color = '#a78bfa';
+                      el.style.background = 'rgba(167,139,250,0.12)';
+                      el.style.transform = 'perspective(400px) translateZ(6px) translateY(-2px)';
+                      el.style.boxShadow = '0 8px 20px rgba(124,58,237,0.25), 0 0 0 1px rgba(167,139,250,0.30)';
                     }}
                     onMouseLeave={e => {
                       const el = e.currentTarget as HTMLElement;
-                      el.style.borderColor = 'rgba(200,184,232,0.18)';
-                      el.style.color = 'rgba(240,237,228,0.50)';
-                      el.style.background = 'rgba(200,184,232,0.05)';
+                      el.style.borderColor = 'rgba(167,139,250,0.20)';
+                      el.style.color = 'rgba(224,216,255,0.55)';
+                      el.style.background = 'rgba(167,139,250,0.05)';
                       el.style.transform = '';
-                      el.style.boxShadow = '2px 2px 0 rgba(200,184,232,0.08)';
+                      el.style.boxShadow = '0 0 12px rgba(124,58,237,0.06)';
                     }}>
                     <Icon className="w-4 h-4" />
                   </a>

@@ -10,7 +10,7 @@ export default function Hero() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      const tl = gsap.timeline({ delay: 2.6 });
+      const tl = gsap.timeline({ delay: 0.3 });
       tl.fromTo('.title-line',
         { clipPath: 'inset(100% 0 0 0)', y: 60 },
         { clipPath: 'inset(0% 0 0 0)', y: 0, duration: 1.2, ease: 'power4.out', stagger: 0.15 }
@@ -72,10 +72,15 @@ export default function Hero() {
 
           {/* Stats row */}
           <div className="grid grid-cols-3 gap-3 max-w-[460px]">
-            {[['150+', 'Active Users'], ['26', 'Premium Tools'], ['95%', 'Success Rate']].map((item) => (
+            {[
+              ['150+', 'Active Users',   'rgba(200,184,232,1)'],
+              ['26',   'Premium Tools',  'rgba(168,220,200,1)'],
+              ['95%',  'Success Rate',   'rgba(232,216,160,1)'],
+            ].map((item) => (
               <div key={item[1]} className="hero-stat-item sketch-corner p-4 text-center relative"
                 style={{ border: '1.5px solid rgba(200,184,232,0.18)', borderRadius: '3px', background: 'rgba(200,184,232,0.05)', boxShadow: '3px 3px 0 rgba(200,184,232,0.07), 5px 5px 0 rgba(200,184,232,0.03)' }}>
-                <span className="font-outfit text-[26px] font-extrabold text-gradient block leading-none">{item[0]}</span>
+                <span className="font-outfit text-[26px] font-extrabold block leading-none"
+                  style={{ color: item[2] as string, textShadow: `0 0 20px ${(item[2] as string).replace('1)', '0.35)')}` }}>{item[0]}</span>
                 <span className="text-[10px] mt-1.5 block font-jetbrains-mono tracking-[1.5px] uppercase" style={{ color: 'rgba(240,237,228,0.42)' }}>{item[1]}</span>
               </div>
             ))}
@@ -84,20 +89,26 @@ export default function Hero() {
 
         {/* Terminal card */}
         <div className="hidden lg:block relative">
+          {/* Offset depth layers */}
           <div className="absolute inset-0 translate-x-[8px] translate-y-[8px] rounded-[3px] pointer-events-none" style={{ border: '1px solid rgba(200,184,232,0.07)' }} />
           <div className="absolute inset-0 translate-x-[14px] translate-y-[14px] rounded-[3px] pointer-events-none" style={{ border: '1px solid rgba(200,184,232,0.04)' }} />
 
-          <div className="relative overflow-hidden sketch-corner" style={{ borderRadius: '3px', border: '1.5px solid rgba(200,184,232,0.18)', background: 'rgba(16,14,24,0.94)', backdropFilter: 'blur(20px)' }}>
-            <div className="h-[2px]" style={{ background: 'linear-gradient(90deg, rgba(200,184,232,0.55) 0%, rgba(168,200,232,0.35) 60%, transparent 100%)' }} />
+          {/* Animated glow ring behind card */}
+          <div className="terminal-glow-ring" />
 
+          <div className="relative overflow-hidden sketch-corner terminal-card-elevated" style={{ borderRadius: '3px', border: '1.5px solid rgba(200,184,232,0.22)', background: 'rgba(16,14,24,0.97)', backdropFilter: 'blur(24px)' }}>
+            {/* Top gradient accent */}
+            <div className="h-[2px]" style={{ background: 'linear-gradient(90deg, rgba(200,184,232,0.70) 0%, rgba(168,200,232,0.45) 55%, rgba(168,220,200,0.30) 80%, transparent 100%)' }} />
+
+            {/* Window chrome */}
             <div className="flex items-center gap-3 px-4 py-3" style={{ borderBottom: '1px solid rgba(200,184,232,0.09)', background: 'rgba(200,184,232,0.03)' }}>
               <div className="flex gap-1.5">
-                {['rgba(232,168,184,0.55)', 'rgba(232,216,160,0.55)', 'rgba(168,220,200,0.55)'].map((c, i) => (
-                  <span key={i} className="w-2.5 h-2.5 rounded-full" style={{ background: c, boxShadow: `0 0 4px ${c}` }} />
+                {['rgba(232,168,184,0.75)', 'rgba(232,216,160,0.75)', 'rgba(168,220,200,0.75)'].map((c, i) => (
+                  <span key={i} className="w-2.5 h-2.5 rounded-full" style={{ background: c, boxShadow: `0 0 6px ${c}` }} />
                 ))}
               </div>
               <span className="font-jetbrains-mono text-[11px] tracking-[1px] flex-1 text-center" style={{ color: 'rgba(240,237,228,0.28)' }}>script-kittens — bash</span>
-              <span className="inline-flex items-center gap-1 font-jetbrains-mono text-[10px]" style={{ color: 'rgba(168,220,200,0.65)' }}>
+              <span className="inline-flex items-center gap-1 font-jetbrains-mono text-[10px]" style={{ color: 'rgba(168,220,200,0.80)' }}>
                 <Zap className="w-2.5 h-2.5" /> LIVE
               </span>
             </div>
@@ -107,20 +118,23 @@ export default function Hero() {
                 <Shield className="w-3 h-3" style={{ color: 'rgba(200,184,232,0.50)' }} />
                 <span>session started — stealth kernel v4.2</span>
               </div>
-              <p><span style={{ color: 'rgba(200,184,232,0.80)' }}>❯ </span>initialize --mode=stealth</p>
-              <p style={{ color: 'rgba(168,220,200,0.85)' }}>✓ Engine initialized — stealth mode active</p>
-              <p className="mt-1"><span style={{ color: 'rgba(200,184,232,0.80)' }}>❯ </span>scan --target=lobby</p>
-              <p style={{ color: 'rgba(232,216,160,0.85)' }}>⟳ Scanning... 48 players detected</p>
-              <p className="mt-1"><span style={{ color: 'rgba(200,184,232,0.80)' }}>❯ </span>deploy --module=aimbot</p>
-              <p style={{ color: 'rgba(168,220,200,0.85)' }}>✓ Module deployed — precision lock engaged</p>
+              <p><span style={{ color: 'rgba(200,184,232,0.90)' }}>❯ </span>initialize --mode=stealth</p>
+              <p style={{ color: 'rgba(168,220,200,0.90)' }}>✓ Engine initialized — stealth mode active</p>
+              <p className="mt-1"><span style={{ color: 'rgba(200,184,232,0.90)' }}>❯ </span>scan --target=lobby</p>
+              <p style={{ color: 'rgba(232,216,160,0.90)' }}>⟳ Scanning... 48 players detected</p>
+              <p className="mt-1"><span style={{ color: 'rgba(200,184,232,0.90)' }}>❯ </span>deploy --module=aimbot</p>
+              <p style={{ color: 'rgba(168,220,200,0.90)' }}>✓ Module deployed — precision lock engaged</p>
               <p className="mt-2">
-                <span style={{ color: 'rgba(200,184,232,0.80)' }}>❯ </span>
-                <span className="inline-block w-[7px] h-[13px] align-middle animate-pulse" style={{ background: 'rgba(200,184,232,0.55)', borderRadius: '1px' }} />
+                <span style={{ color: 'rgba(200,184,232,0.90)' }}>❯ </span>
+                <span className="inline-block w-[7px] h-[13px] align-middle animate-pulse" style={{ background: 'rgba(200,184,232,0.70)', borderRadius: '1px' }} />
               </p>
             </div>
 
-            <div className="flex items-center justify-between px-5 py-2.5" style={{ borderTop: '1px solid rgba(200,184,232,0.07)', background: 'rgba(200,184,232,0.02)' }}>
-              <span className="font-jetbrains-mono text-[10px]" style={{ color: 'rgba(168,220,200,0.55)' }}>● connected</span>
+            <div className="flex items-center justify-between px-5 py-2.5" style={{ borderTop: '1px solid rgba(200,184,232,0.09)', background: 'rgba(200,184,232,0.02)' }}>
+              <span className="inline-flex items-center gap-1.5 font-jetbrains-mono text-[10px]" style={{ color: 'rgba(168,220,200,0.70)' }}>
+                <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: 'rgba(168,220,200,0.9)', boxShadow: '0 0 5px rgba(168,220,200,0.6)' }} />
+                connected
+              </span>
               <span className="inline-flex items-center gap-1 font-jetbrains-mono text-[10px]" style={{ color: 'rgba(240,237,228,0.28)' }}>
                 <Users className="w-2.5 h-2.5" /> 2,847 online
               </span>

@@ -48,7 +48,7 @@ export default function Features() {
         {/* Grid */}
         <div className="features-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 max-w-[1000px] mx-auto">
           {features.map((feature, i) => (
-            <div key={i} className="feature-card group sketch-corner relative p-7 transition-all duration-300"
+            <div key={i} className="feature-card group sketch-corner relative p-7 transition-all duration-300 overflow-hidden"
               style={{
                 background: 'rgba(255,253,245,0.03)',
                 border: '1.5px solid rgba(200,184,232,0.12)',
@@ -57,9 +57,9 @@ export default function Features() {
               }}
               onMouseEnter={e => {
                 const el = e.currentTarget as HTMLElement;
-                el.style.borderColor = 'rgba(200,184,232,0.28)';
-                el.style.background = 'rgba(200,184,232,0.05)';
-                el.style.boxShadow = '4px 4px 0 rgba(200,184,232,0.12), 7px 7px 0 rgba(200,184,232,0.06)';
+                el.style.borderColor = 'rgba(200,184,232,0.32)';
+                el.style.background = 'rgba(200,184,232,0.055)';
+                el.style.boxShadow = '4px 4px 0 rgba(200,184,232,0.14), 8px 8px 0 rgba(200,184,232,0.07), 0 0 30px rgba(200,184,232,0.06)';
                 el.style.transform = 'translate(-2px,-2px)';
               }}
               onMouseLeave={e => {
@@ -70,8 +70,12 @@ export default function Features() {
                 el.style.transform = '';
               }}>
 
+              {/* Top accent line — appears on hover via CSS */}
+              <div className="absolute top-0 left-0 right-0 h-[1.5px] opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                style={{ background: 'linear-gradient(90deg, transparent, rgba(200,184,232,0.60), rgba(168,220,200,0.40), transparent)' }} />
+
               {/* Icon */}
-              <div className="w-11 h-11 mb-5 flex items-center justify-center transition-all duration-300"
+              <div className="w-11 h-11 mb-5 flex items-center justify-center transition-all duration-300 group-hover:scale-105"
                 style={{
                   border: '1.5px solid rgba(200,184,232,0.22)',
                   borderRadius: '3px',

@@ -284,7 +284,7 @@ export default function Team() {
           <div className="relative flex items-center justify-center mb-10">
             <div className="flex-1 h-px" style={{ background: 'linear-gradient(to right, transparent, rgba(200,184,232,0.14))' }} />
             <span className="font-jetbrains-mono text-[9px] font-bold uppercase tracking-[3px] px-6 whitespace-nowrap"
-              style={{ color: 'rgba(200,184,232,0.38)' }}>Kitten Patrons</span>
+              style={{ color: 'rgba(200,184,232,0.38)' }}>Exclusive Members</span>
             <div className="flex-1 h-px" style={{ background: 'linear-gradient(to left, transparent, rgba(200,184,232,0.14))' }} />
           </div>
 

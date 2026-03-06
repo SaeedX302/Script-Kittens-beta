@@ -113,26 +113,26 @@ export default function Courses() {
           {courses.map((course) => (
             <div key={course.id} className="course-card group relative overflow-hidden transition-all duration-300"
               style={{
-                background: 'rgba(255,253,245,0.03)',
-                border: '1.5px solid rgba(200,184,232,0.12)',
-                borderRadius: '4px',
-                boxShadow: '3px 3px 0 rgba(200,184,232,0.05), 5px 5px 0 rgba(200,184,232,0.025)',
+                background: 'rgba(120,100,200,0.06)',
+                border: '1.5px solid rgba(167,139,250,0.14)',
+                borderRadius: '10px',
+                boxShadow: '0 4px 24px rgba(0,0,0,0.35), 0 0 0 1px rgba(124,58,237,0.06)',
               }}
               onMouseEnter={e => {
                 const el = e.currentTarget as HTMLElement;
-                el.style.borderColor = `rgba(${course.accentRGB},0.30)`;
-                el.style.transform = 'translate(-2px,-2px)';
-                el.style.boxShadow = `4px 4px 0 rgba(${course.accentRGB},0.10), 7px 7px 0 rgba(${course.accentRGB},0.04)`;
+                el.style.borderColor = `rgba(${course.accentRGB},0.35)`;
+                el.style.transform = 'perspective(900px) translateZ(8px) translateY(-4px)';
+                el.style.boxShadow = `0 16px 48px rgba(0,0,0,0.50), 0 0 28px rgba(${course.accentRGB},0.14), 0 0 0 1px rgba(${course.accentRGB},0.22)`;
               }}
               onMouseLeave={e => {
                 const el = e.currentTarget as HTMLElement;
-                el.style.borderColor = 'rgba(200,184,232,0.12)';
+                el.style.borderColor = 'rgba(167,139,250,0.14)';
                 el.style.transform = '';
-                el.style.boxShadow = '3px 3px 0 rgba(200,184,232,0.05), 5px 5px 0 rgba(200,184,232,0.025)';
+                el.style.boxShadow = '0 4px 24px rgba(0,0,0,0.35), 0 0 0 1px rgba(124,58,237,0.06)';
               }}>
 
-              {/* Top accent line */}
-              <div className="h-[2px]" style={{ background: `linear-gradient(90deg, rgba(${course.accentRGB},0.65), rgba(${course.accentRGB},0.18), transparent)` }} />
+              {/* Top neon accent */}
+              <div className="h-[2px] rounded-t-[10px]" style={{ background: `linear-gradient(90deg, rgba(${course.accentRGB},0.70), rgba(${course.accentRGB},0.20), transparent)`, boxShadow: `0 0 8px rgba(${course.accentRGB},0.40)` }} />
 
               <div className="p-7 relative z-10">
                 {/* Badge */}
@@ -153,19 +153,19 @@ export default function Courses() {
                     style={{
                       background: `rgba(${course.accentRGB},0.10)`,
                       border: `1.5px solid rgba(${course.accentRGB},0.25)`,
-                      borderRadius: '3px',
+                      borderRadius: '8px',
                       color: `rgba(${course.accentRGB},1)`,
-                      boxShadow: '2px 2px 0 rgba(200,184,232,0.07)',
+                      boxShadow: `0 0 14px rgba(${course.accentRGB},0.20)`,
                     }}>
                     <course.icon className="w-5 h-5" />
                   </div>
                   <div>
                     <span className="flex items-center gap-1.5 px-2 py-0.5 mb-2 font-jetbrains-mono text-[10px] inline-flex"
                       style={{
-                        background: 'rgba(255,253,245,0.04)',
-                        border: '1px solid rgba(200,184,232,0.10)',
-                        borderRadius: '2px',
-                        color: 'rgba(240,237,228,0.45)',
+                        background: 'rgba(120,100,200,0.06)',
+                        border: '1px solid rgba(167,139,250,0.14)',
+                        borderRadius: '4px',
+                        color: 'rgba(224,216,255,0.48)',
                       }}>
                       <Hash className="w-2.5 h-2.5" /> {course.lang}
                     </span>
@@ -173,28 +173,28 @@ export default function Courses() {
                       <div className="flex gap-0.5">
                         {[...Array(5)].map((_, i) => (
                           <Star key={i} className="w-3 h-3 fill-current"
-                            style={{ color: i < Math.floor(course.rating) ? `rgba(${course.accentRGB},0.85)` : 'rgba(240,237,228,0.18)' }} />
+                            style={{ color: i < Math.floor(course.rating) ? `rgba(${course.accentRGB},0.85)` : 'rgba(224,216,255,0.18)' }} />
                         ))}
                       </div>
                       <span className="font-jetbrains-mono text-[11px] font-bold" style={{ color: `rgba(${course.accentRGB},1)` }}>{course.rating}</span>
-                      <span className="font-inter text-[11px]" style={{ color: 'rgba(240,237,228,0.35)' }}>({course.reviews})</span>
+                      <span className="font-inter text-[11px]" style={{ color: 'rgba(224,216,255,0.38)' }}>({course.reviews})</span>
                     </div>
                   </div>
                 </div>
 
-                <h3 className="font-outfit text-[18px] font-bold mb-2 tracking-[-0.4px]" style={{ color: '#f0ede4' }}>{course.title}</h3>
-                <p className="text-[13px] mb-5 leading-[1.7]" style={{ color: 'rgba(240,237,228,0.55)' }}>{course.desc}</p>
+                <h3 className="font-outfit text-[18px] font-bold mb-2 tracking-[-0.4px]" style={{ color: '#f0eeff' }}>{course.title}</h3>
+                <p className="text-[13px] mb-5 leading-[1.7]" style={{ color: 'rgba(224,216,255,0.55)' }}>{course.desc}</p>
 
                 {/* Modules grid */}
                 <div className="grid grid-cols-2 gap-2 mb-6">
                   {course.modules.map((mod, i) => (
                     <div key={i} className="flex items-center gap-2 px-3 py-2"
                       style={{
-                        background: 'rgba(255,253,245,0.02)',
-                        border: '1px solid rgba(200,184,232,0.08)',
-                        borderRadius: '3px',
+                        background: 'rgba(120,100,200,0.04)',
+                        border: '1px solid rgba(167,139,250,0.10)',
+                        borderRadius: '5px',
                         fontSize: '12px',
-                        color: 'rgba(240,237,228,0.60)',
+                        color: 'rgba(224,216,255,0.62)',
                       }}>
                       <mod.icon className="w-3 h-3 shrink-0" style={{ color: `rgba(${course.accentRGB},0.75)` }} />
                       <span className="font-space-grotesk font-medium">{mod.text}</span>
@@ -205,10 +205,10 @@ export default function Courses() {
                 {/* Progress bar */}
                 <div className="mb-5">
                   <div className="flex items-center justify-between mb-2">
-                    <span className="font-jetbrains-mono text-[10px]" style={{ color: 'rgba(240,237,228,0.38)' }}>COMPLETION RATE</span>
+                    <span className="font-jetbrains-mono text-[10px]" style={{ color: 'rgba(224,216,255,0.40)' }}>COMPLETION RATE</span>
                     <span className="font-jetbrains-mono text-[11px] font-bold" style={{ color: `rgba(${course.accentRGB},0.85)` }}>{course.completion}%</span>
                   </div>
-                  <div className="h-1.5 rounded-full overflow-hidden" style={{ background: 'rgba(200,184,232,0.10)' }}>
+                  <div className="h-1.5 rounded-full overflow-hidden" style={{ background: 'rgba(167,139,250,0.12)' }}>
                     <div className="h-full rounded-full" style={{ width: `${course.completion}%`, background: `rgba(${course.accentRGB},0.55)` }} />
                   </div>
                 </div>
@@ -218,10 +218,10 @@ export default function Courses() {
                   {course.meta.map((m, i) => (
                     <span key={i} className="inline-flex items-center gap-1.5 px-2.5 py-1 font-inter text-[11px]"
                       style={{
-                        background: 'rgba(255,253,245,0.03)',
-                        border: '1px solid rgba(200,184,232,0.10)',
-                        borderRadius: '2px',
-                        color: 'rgba(240,237,228,0.45)',
+                        background: 'rgba(120,100,200,0.04)',
+                        border: '1px solid rgba(167,139,250,0.10)',
+                        borderRadius: '4px',
+                        color: 'rgba(224,216,255,0.48)',
                       }}>
                       <m.icon className="w-3 h-3" style={{ color: `rgba(${course.accentRGB},0.65)` }} />
                       {m.text}
@@ -231,10 +231,10 @@ export default function Courses() {
 
                 {/* Price + CTA */}
                 <div className="flex items-center justify-between pt-5"
-                  style={{ borderTop: '1px dashed rgba(200,184,232,0.12)' }}>
+                  style={{ borderTop: '1px dashed rgba(167,139,250,0.18)' }}>
                   <div className="flex items-baseline gap-2">
                     <span className="font-outfit text-[28px] font-extrabold" style={{ color: `rgba(${course.accentRGB},1)` }}>${course.price.current}</span>
-                    <span className="font-inter text-[14px] line-through" style={{ color: 'rgba(240,237,228,0.28)' }}>${course.price.old}</span>
+                    <span className="font-inter text-[14px] line-through" style={{ color: 'rgba(224,216,255,0.28)' }}>${course.price.old}</span>
                     <span className="font-jetbrains-mono text-[10px] px-2 py-0.5"
                       style={{
                         background: `rgba(${course.accentRGB},0.12)`,
@@ -247,21 +247,21 @@ export default function Courses() {
                     className="flex items-center gap-2 px-5 py-2.5 font-outfit font-bold text-[13px] transition-all duration-300 group/btn"
                     style={{
                       border: `1.5px solid rgba(${course.accentRGB},0.30)`,
-                      borderRadius: '3px',
+                      borderRadius: '7px',
                       background: `rgba(${course.accentRGB},0.10)`,
                       color: `rgba(${course.accentRGB},1)`,
-                      boxShadow: `2px 2px 0 rgba(${course.accentRGB},0.10)`,
+                      boxShadow: `0 0 12px rgba(${course.accentRGB},0.12)`,
                     }}
                     onMouseEnter={e => {
                       const el = e.currentTarget as HTMLElement;
                       el.style.background = `rgba(${course.accentRGB},0.18)`;
-                      el.style.boxShadow = `3px 3px 0 rgba(${course.accentRGB},0.16)`;
-                      el.style.transform = 'translate(-1px,-1px)';
+                      el.style.boxShadow = `0 0 20px rgba(${course.accentRGB},0.22)`;
+                      el.style.transform = 'perspective(400px) translateZ(4px) translateY(-2px)';
                     }}
                     onMouseLeave={e => {
                       const el = e.currentTarget as HTMLElement;
                       el.style.background = `rgba(${course.accentRGB},0.10)`;
-                      el.style.boxShadow = `2px 2px 0 rgba(${course.accentRGB},0.10)`;
+                      el.style.boxShadow = `0 0 12px rgba(${course.accentRGB},0.12)`;
                       el.style.transform = '';
                     }}>
                     <Unlock className="w-3.5 h-3.5" /> Enroll Now
@@ -277,34 +277,34 @@ export default function Courses() {
           {perks.map((perk, i) => (
             <div key={i} className="courses-perk p-5 text-center transition-all duration-300"
               style={{
-                background: 'rgba(255,253,245,0.03)',
-                border: '1.5px solid rgba(200,184,232,0.10)',
-                borderRadius: '4px',
-                boxShadow: '2px 2px 0 rgba(200,184,232,0.04)',
+                background: 'rgba(120,100,200,0.06)',
+                border: '1.5px solid rgba(167,139,250,0.12)',
+                borderRadius: '8px',
+                boxShadow: '0 4px 16px rgba(0,0,0,0.30)',
               }}
               onMouseEnter={e => {
                 const el = e.currentTarget as HTMLElement;
-                el.style.borderColor = 'rgba(200,184,232,0.24)';
-                el.style.transform = 'translate(-1px,-1px)';
-                el.style.boxShadow = '3px 3px 0 rgba(200,184,232,0.09)';
+                el.style.borderColor = 'rgba(167,139,250,0.30)';
+                el.style.transform = 'perspective(600px) translateZ(6px) translateY(-2px)';
+                el.style.boxShadow = '0 10px 32px rgba(0,0,0,0.40), 0 0 16px rgba(124,58,237,0.14)';
               }}
               onMouseLeave={e => {
                 const el = e.currentTarget as HTMLElement;
-                el.style.borderColor = 'rgba(200,184,232,0.10)';
+                el.style.borderColor = 'rgba(167,139,250,0.12)';
                 el.style.transform = '';
-                el.style.boxShadow = '2px 2px 0 rgba(200,184,232,0.04)';
+                el.style.boxShadow = '0 4px 16px rgba(0,0,0,0.30)';
               }}>
               <div className="w-10 h-10 mx-auto mb-3 flex items-center justify-center"
                 style={{
-                  border: '1.5px solid rgba(200,184,232,0.20)',
-                  borderRadius: '3px',
-                  background: 'rgba(200,184,232,0.07)',
-                  color: '#c8b8e8',
+                  border: '1.5px solid rgba(167,139,250,0.25)',
+                  borderRadius: '8px',
+                  background: 'rgba(124,58,237,0.10)',
+                  color: '#a78bfa',
                 }}>
                 <perk.icon className="w-4.5 h-4.5 w-[18px] h-[18px]" />
               </div>
-              <h4 className="font-outfit text-[14px] font-bold mb-1.5" style={{ color: '#f0ede4' }}>{perk.title}</h4>
-              <p className="text-[12px] leading-[1.6]" style={{ color: 'rgba(240,237,228,0.48)' }}>{perk.desc}</p>
+              <h4 className="font-outfit text-[14px] font-bold mb-1.5" style={{ color: '#f0eeff' }}>{perk.title}</h4>
+              <p className="text-[12px] leading-[1.6]" style={{ color: 'rgba(224,216,255,0.50)' }}>{perk.desc}</p>
             </div>
           ))}
         </div>
