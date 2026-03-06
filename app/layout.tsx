@@ -27,7 +27,7 @@ export default function RootLayout({children}: {children: React.ReactNode}) {
         </ClientOnly>
         <BackgroundEffects />
         <Sidebar />
-        <main className="relative z-10 min-h-screen pt-[72px]">
+        <main id="app-main" className="relative z-10 min-h-screen pt-[72px]">
           {children}
         </main>
       </body>

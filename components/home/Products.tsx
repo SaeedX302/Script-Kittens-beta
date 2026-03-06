@@ -86,13 +86,18 @@ const products = [
 
 const handleTilt = (e: React.MouseEvent<HTMLElement>) => {
   const el = e.currentTarget as HTMLElement;
+  // Disable transform transitions while actively tracking so updates are immediate
+  el.classList.add('tilting');
   const rect = el.getBoundingClientRect();
   const x = ((e.clientX - rect.left) / rect.width  - 0.5) * 12;
   const y = ((e.clientY - rect.top)  / rect.height - 0.5) * -12;
   el.style.transform = `perspective(900px) rotateX(${y}deg) rotateY(${x}deg) translateZ(10px)`;
 };
 const resetTilt = (e: React.MouseEvent<HTMLElement>) => {
-  (e.currentTarget as HTMLElement).style.transform = '';
+  const el = e.currentTarget as HTMLElement;
+  // Re-enable transitions so the reset animates smoothly
+  el.classList.remove('tilting');
+  el.style.transform = '';
 };
 
 export default function Products() {
@@ -125,12 +130,13 @@ export default function Products() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
           {products.map((product) => (
-            <div key={product.id} className="product-card relative flex flex-col transition-all duration-300"
+            <div key={product.id} className="product-card relative flex flex-col"
               style={{
                 background: 'rgba(120,100,200,0.06)',
                 border: '1.5px solid rgba(167,139,250,0.14)',
                 borderRadius: '10px',
                 boxShadow: '0 4px 24px rgba(0,0,0,0.35), 0 0 0 1px rgba(124,58,237,0.06)',
+                transition: 'border-color 0.3s ease, background 0.3s ease, box-shadow 0.3s ease, transform 0.35s ease',
               }}
               onMouseMove={handleTilt}
               onMouseEnter={e => {

@@ -4,6 +4,7 @@ import { useEffect, useRef } from 'react';
 import { Mail, MessageCircle, Send } from 'lucide-react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { SUPPORT_EMAIL } from '@/lib/constants';
 
 export default function Contact() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -104,8 +105,8 @@ export default function Contact() {
         <div className="contact-cards grid grid-cols-1 md:grid-cols-3 gap-5">
           {[
             { href: 'https://discord.gg/AqkdsPMU7M', icon: MessageCircle, label: 'Discord', desc: 'Join our community', color: 'rgba(167,139,250,1)', colorMuted: 'rgba(167,139,250,0.10)' },
-            { href: '#', icon: Send, label: 'Telegram', desc: 'Quick support', color: 'rgba(96,165,250,1)', colorMuted: 'rgba(96,165,250,0.10)' },
-            { href: 'mailto:support@script-kittens.com', icon: Mail, label: 'Email', desc: 'support@script-kittens.com', color: 'rgba(251,191,36,1)', colorMuted: 'rgba(251,191,36,0.10)' },
+            { href: 'https://t.me/scriptkittens', icon: Send, label: 'Telegram', desc: 'Quick support', color: 'rgba(96,165,250,1)', colorMuted: 'rgba(96,165,250,0.10)' },
+            { href: `mailto:${SUPPORT_EMAIL}`, icon: Mail, label: 'Email', desc: SUPPORT_EMAIL, color: 'rgba(251,191,36,1)', colorMuted: 'rgba(251,191,36,0.10)' },
           ].map(({ href, icon: Icon, label, desc, color, colorMuted }) => (
             <a key={label} href={href} target={href.startsWith('http') ? '_blank' : undefined} rel="noreferrer"
               className="contact-card flex flex-col items-center text-center p-9 transition-all duration-300"

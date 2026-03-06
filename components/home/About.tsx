@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import Image from 'next/image';
 import { Instagram, MessageCircle, Youtube } from 'lucide-react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -79,10 +80,12 @@ export default function About() {
                 style={{ background: 'linear-gradient(90deg, rgba(167,139,250,0.70), rgba(96,165,250,0.50), transparent)', boxShadow: '0 0 12px rgba(124,58,237,0.4)' }} />
               <div className="absolute inset-0 z-10 pointer-events-none"
                 style={{ background: 'linear-gradient(to top, rgba(10,9,16,0.7) 0%, rgba(10,9,16,0.15) 40%, transparent 70%)' }} />
-              <img
+              <Image
                 src="/coreteam/Furqan.png"
                 alt="Furqan — Founder of Script Kittens"
-                className="w-full h-full object-cover object-[center_25%] grayscale-[15%] brightness-95 transition-all duration-700 group-hover:grayscale-0 group-hover:brightness-105 group-hover:scale-105"
+                fill
+                sizes="(max-width: 768px) 100vw, 420px"
+                className="object-cover object-[center_25%] grayscale-[15%] brightness-95 transition-all duration-700 group-hover:grayscale-0 group-hover:brightness-105 group-hover:scale-105"
                 loading="lazy"
               />
             </div>
@@ -95,11 +98,12 @@ export default function About() {
               <p className="text-[13px] mb-5" style={{ color: 'rgba(224,216,255,0.55)' }}>Lead Developer &amp; Visionary</p>
               <div className="flex justify-center gap-2.5">
                 {[
-                  { href: 'https://discord.gg/AqkdsPMU7M', icon: MessageCircle },
-                  { href: 'https://www.youtube.com/channel/UCIlubysLx-75CVZ1dcIfWvA', icon: Youtube },
-                  { href: 'https://www.instagram.com/fuqii69/', icon: Instagram },
-                ].map(({ href, icon: Icon }) => (
+                  { href: 'https://discord.gg/AqkdsPMU7M', icon: MessageCircle, label: 'Discord' },
+                  { href: 'https://www.youtube.com/channel/UCIlubysLx-75CVZ1dcIfWvA', icon: Youtube, label: 'YouTube' },
+                  { href: 'https://www.instagram.com/fuqii69/', icon: Instagram, label: 'Instagram' },
+                ].map(({ href, icon: Icon, label }) => (
                   <a key={href} href={href} target="_blank" rel="noreferrer"
+                    aria-label={label}
                     className="w-10 h-10 flex items-center justify-center transition-all duration-300"
                     style={{ border: '1.5px solid rgba(167,139,250,0.20)', borderRadius: '6px', background: 'rgba(167,139,250,0.05)', color: 'rgba(224,216,255,0.55)', boxShadow: '0 0 12px rgba(124,58,237,0.06)' }}
                     onMouseEnter={e => {

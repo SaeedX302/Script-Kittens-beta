@@ -10,6 +10,7 @@ export default function Preloader() {
   const [removed, setRemoved] = useState(false);
   const rafRef = useRef<number | null>(null);
   const startRef = useRef<number | null>(null);
+  const launchButtonRef = useRef<HTMLButtonElement>(null);
   const LOAD_MS = 2000; // progress bar duration
 
   // Animate percentage counter
@@ -34,10 +35,35 @@ export default function Preloader() {
     };
   }, []);
 
+  // Focus the launch button when ready; make background inert while open
+  useEffect(() => {
+    if (phase === 'ready') {
+      launchButtonRef.current?.focus();
+    }
+    // Make page content inaccessible while preloader is shown
+    const appRoot = document.getElementById('__next') ?? document.querySelector('main');
+    if (appRoot) {
+      if (phase !== 'done') {
+        (appRoot as HTMLElement).setAttribute('inert', '');
+        (appRoot as HTMLElement).setAttribute('aria-hidden', 'true');
+      } else {
+        (appRoot as HTMLElement).removeAttribute('inert');
+        (appRoot as HTMLElement).removeAttribute('aria-hidden');
+      }
+    }
+  }, [phase]);
+
   const handleLaunch = () => {
     setPhase('launching');
-    // After exit animation completes, unmount
-    setTimeout(() => setRemoved(true), 1200);
+    // After exit animation completes, restore background and unmount
+    setTimeout(() => {
+      setRemoved(true);
+      const appRoot = document.getElementById('__next') ?? document.querySelector('main');
+      if (appRoot) {
+        (appRoot as HTMLElement).removeAttribute('inert');
+        (appRoot as HTMLElement).removeAttribute('aria-hidden');
+      }
+    }, 1200);
   };
 
   if (removed) return null;
@@ -45,8 +71,22 @@ export default function Preloader() {
   const isLaunching = phase === 'launching';
   const isReady = phase === 'ready';
 
+  const statusText =
+    phase === 'loading' ? `Loading — ${pct}%` :
+    phase === 'ready'   ? 'All systems ready. Press Launch to continue.' :
+    'Launching...';
+
   return (
-    <div className={`pl-root${isLaunching ? ' pl-root--exit' : ''}`} aria-label="Loading screen">
+    <div
+      className={`pl-root${isLaunching ? ' pl-root--exit' : ''}`}
+      role="dialog"
+      aria-modal="true"
+      aria-label="Loading screen"
+    >
+      {/* Screen-reader live status */}
+      <div aria-live="polite" aria-atomic="true" className="sr-only">
+        {statusText}
+      </div>
 
       {/* Animated grid overlay */}
       <div className="pl-grid" />
@@ -131,6 +171,7 @@ export default function Preloader() {
 
         {/* Launch button */}
         <button
+          ref={launchButtonRef}
           className={`pl-launch-btn${isReady || isLaunching ? ' pl-launch-btn--visible' : ''}${isLaunching ? ' pl-launch-btn--firing' : ''}`}
           onClick={handleLaunch}
           disabled={!isReady}

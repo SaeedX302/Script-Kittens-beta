@@ -99,7 +99,10 @@ export default function CustomCursor({ active }: Props) {
     };
     raf = requestAnimationFrame(animate);
 
-    // Init styles immediately
+    // Init styles with off-screen position so there's no flash at (0,0)
+    if (dotRef.current)   dotRef.current.style.transform   = 'translate(-9999px,-9999px) translate(-50%,-50%)';
+    if (trailRef.current) trailRef.current.style.transform = 'translate(-9999px,-9999px) translate(-50%,-50%)';
+    if (ringRef.current)  ringRef.current.style.transform  = 'translate(-9999px,-9999px) translate(-50%,-50%)';
     applyRingStyle();
     applyDotStyle();
     applyTrailStyle();

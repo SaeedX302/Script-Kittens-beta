@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
+import { SUPPORT_EMAIL } from '@/lib/constants';
 
 export default function Footer() {
   return (
@@ -82,10 +83,10 @@ export default function Footer() {
               <p className="font-jetbrains-mono text-[10px] uppercase tracking-[2.5px] font-bold"
                 style={{ color: 'rgba(167,139,250,0.45)' }}>Support</p>
               {[
-                ['#', 'Documentation'],
-                ['#', 'FAQ'],
+                ['/docs', 'Documentation'],
+                ['/faq', 'FAQ'],
                 ['/#contact', 'Contact'],
-                ['#', 'System Status'],
+                ['https://status.scriptkittens.com', 'System Status'],
               ].map(([href, label]) => (
                 <Link key={label} href={href}
                   className="block text-[13px] font-medium transition-all duration-200"
@@ -101,12 +102,12 @@ export default function Footer() {
             <div className="space-y-3">
               <p className="font-jetbrains-mono text-[10px] uppercase tracking-[2.5px] font-bold"
                 style={{ color: 'rgba(167,139,250,0.45)' }}>Get in touch</p>
-              <a href="mailto:support@scriptkittens.com"
+              <a href={`mailto:${SUPPORT_EMAIL}`}
                 className="block text-[13px] font-semibold transition-colors duration-200"
                 style={{ color: '#f0eeff' }}
                 onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = '#a78bfa'; }}
                 onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = '#f0eeff'; }}>
-                support@scriptkittens.com
+                {SUPPORT_EMAIL}
               </a>
               <div className="flex gap-2.5 pt-1">
                 {[
@@ -136,7 +137,7 @@ export default function Footer() {
                       el.style.boxShadow = '0 0 12px rgba(124,58,237,0.06)';
                       el.style.transform = '';
                     }}>
-                    <Image src={s.src} alt={s.alt} width={24} height={24} className="object-contain" unoptimized />
+                    <Image src={s.src} alt={s.alt} width={24} height={24} className="object-contain" />
                   </a>
                 ))}
               </div>
@@ -150,8 +151,8 @@ export default function Footer() {
         style={{ color: 'rgba(224,216,255,0.30)' }}>
         <span>© 2026 Script Kittens. All rights reserved.</span>
         <div className="flex items-center gap-3">
-          {['Privacy Policy', 'Terms of Service', 'Cookie Policy'].map((l, i) => (
-            <Link key={l} href="#"
+          {[['Privacy Policy','/privacy'],['Terms of Service','/terms'],['Cookie Policy','/cookies']].map(([l, route], i) => (
+            <Link key={l} href={route}
               className="transition-colors duration-200"
               onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = 'rgba(167,139,250,0.70)'; }}
               onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = 'rgba(224,216,255,0.30)'; }}>
