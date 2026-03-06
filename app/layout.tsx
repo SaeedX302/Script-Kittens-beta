@@ -20,16 +20,16 @@ export const metadata: Metadata = {
 export default function RootLayout({children}: {children: React.ReactNode}) {
   return (
     <html lang="en" className={`${outfit.variable} ${inter.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable} dark scroll-smooth`} suppressHydrationWarning>
-      <body className="bg-[#13111a] text-[#f0ede4] font-inter antialiased selection:bg-[#c8b8e8]/30 selection:text-[#f0ede4]" suppressHydrationWarning>
+      <body className="bg-[#13111a] text-[#f0eeff] font-inter antialiased selection:bg-[#7c3aed]/30 selection:text-[#f0eeff]" suppressHydrationWarning>
         <ClientOnly>
           <Preloader />
           <PageTransition />
-          <BackgroundEffects />
-          <Sidebar />
-          <main className="relative z-10 min-h-screen pt-[72px]">
-            {children}
-          </main>
         </ClientOnly>
+        <BackgroundEffects />
+        <Sidebar />
+        <main id="app-main" className="relative z-10 min-h-screen pt-[72px]">
+          {children}
+        </main>
       </body>
     </html>
   );

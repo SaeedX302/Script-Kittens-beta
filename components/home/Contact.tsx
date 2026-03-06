@@ -4,6 +4,7 @@ import { useEffect, useRef } from 'react';
 import { Mail, MessageCircle, Send } from 'lucide-react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { SUPPORT_EMAIL } from '@/lib/constants';
 
 export default function Contact() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -32,26 +33,26 @@ export default function Contact() {
         {/* CTA banner */}
         <div className="cta-box relative overflow-hidden mb-12"
           style={{
-            background: 'rgba(255,253,245,0.03)',
-            border: '1.5px solid rgba(200,184,232,0.16)',
-            borderRadius: '4px',
-            boxShadow: '5px 5px 0 rgba(200,184,232,0.07), 9px 9px 0 rgba(200,184,232,0.03)',
+            background: 'rgba(120,100,200,0.05)',
+            border: '1.5px solid rgba(167,139,250,0.18)',
+            borderRadius: '8px',
+            boxShadow: '0 8px 40px rgba(0,0,0,0.40), 0 0 0 1px rgba(124,58,237,0.08), 0 0 60px rgba(124,58,237,0.05)',
             padding: '48px 56px',
           }}>
 
           {/* Corner brackets */}
           <div className="absolute top-3 left-3 w-5 h-5 pointer-events-none"
-            style={{ borderTop: '1.5px solid rgba(200,184,232,0.35)', borderLeft: '1.5px solid rgba(200,184,232,0.35)' }} />
+            style={{ borderTop: '1.5px solid rgba(167,139,250,0.40)', borderLeft: '1.5px solid rgba(167,139,250,0.40)' }} />
           <div className="absolute top-3 right-3 w-5 h-5 pointer-events-none"
-            style={{ borderTop: '1.5px solid rgba(200,184,232,0.35)', borderRight: '1.5px solid rgba(200,184,232,0.35)' }} />
+            style={{ borderTop: '1.5px solid rgba(167,139,250,0.40)', borderRight: '1.5px solid rgba(167,139,250,0.40)' }} />
           <div className="absolute bottom-3 left-3 w-5 h-5 pointer-events-none"
-            style={{ borderBottom: '1.5px solid rgba(200,184,232,0.35)', borderLeft: '1.5px solid rgba(200,184,232,0.35)' }} />
+            style={{ borderBottom: '1.5px solid rgba(167,139,250,0.40)', borderLeft: '1.5px solid rgba(167,139,250,0.40)' }} />
           <div className="absolute bottom-3 right-3 w-5 h-5 pointer-events-none"
-            style={{ borderBottom: '1.5px solid rgba(200,184,232,0.35)', borderRight: '1.5px solid rgba(200,184,232,0.35)' }} />
+            style={{ borderBottom: '1.5px solid rgba(167,139,250,0.40)', borderRight: '1.5px solid rgba(167,139,250,0.40)' }} />
 
-          {/* Chalk smudge */}
+          {/* Neon ambient */}
           <div className="absolute inset-0 pointer-events-none"
-            style={{ background: 'radial-gradient(ellipse 60% 60% at 50% 50%, rgba(200,184,232,0.04) 0%, transparent 100%)' }} />
+            style={{ background: 'radial-gradient(ellipse 60% 60% at 50% 50%, rgba(124,58,237,0.06) 0%, transparent 100%)' }} />
 
           <div className="grid grid-cols-1 lg:grid-cols-[auto_1fr] gap-10 items-center relative z-10">
             {/* Floating icon */}
@@ -59,11 +60,11 @@ export default function Contact() {
               <div className="relative w-[160px] h-[160px] flex items-center justify-center animate-chalk-drift">
                 <div className="w-20 h-20 flex items-center justify-center"
                   style={{
-                    border: '1.5px solid rgba(200,184,232,0.30)',
-                    borderRadius: '4px',
-                    background: 'rgba(200,184,232,0.08)',
-                    color: '#c8b8e8',
-                    boxShadow: '4px 4px 0 rgba(200,184,232,0.12), 7px 7px 0 rgba(200,184,232,0.06)',
+                    border: '1.5px solid rgba(167,139,250,0.35)',
+                    borderRadius: '8px',
+                    background: 'rgba(124,58,237,0.10)',
+                    color: '#a78bfa',
+                    boxShadow: '0 0 30px rgba(124,58,237,0.20), 0 8px 32px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.06)',
                   }}>
                   <MessageCircle className="w-9 h-9" />
                 </div>
@@ -73,7 +74,8 @@ export default function Contact() {
                     <div key={i} className="absolute border rounded-full opacity-0"
                       style={{
                         width: `${90 + i * 40}px`, height: `${90 + i * 40}px`,
-                        borderColor: 'rgba(200,184,232,0.20)',
+                        borderColor: 'rgba(124,58,237,0.30)',
+                        boxShadow: `0 0 8px rgba(124,58,237,0.15)`,
                         animation: `ctaRingPulse 3s ease-out ${delay}s infinite`,
                       }} />
                   ))}
@@ -102,44 +104,44 @@ export default function Contact() {
         {/* Contact cards row */}
         <div className="contact-cards grid grid-cols-1 md:grid-cols-3 gap-5">
           {[
-            { href: 'https://discord.gg/AqkdsPMU7M', icon: MessageCircle, label: 'Discord', desc: 'Join our community', color: 'rgba(200,184,232,1)', colorMuted: 'rgba(200,184,232,0.10)' },
-            { href: '#', icon: Send, label: 'Telegram', desc: 'Quick support', color: 'rgba(168,200,232,1)', colorMuted: 'rgba(168,200,232,0.10)' },
-            { href: 'mailto:support@script-kittens.com', icon: Mail, label: 'Email', desc: 'support@script-kittens.com', color: 'rgba(232,196,168,1)', colorMuted: 'rgba(232,196,168,0.10)' },
+            { href: 'https://discord.gg/AqkdsPMU7M', icon: MessageCircle, label: 'Discord', desc: 'Join our community', color: 'rgba(167,139,250,1)', colorMuted: 'rgba(167,139,250,0.10)' },
+            { href: 'https://t.me/scriptkittens', icon: Send, label: 'Telegram', desc: 'Quick support', color: 'rgba(96,165,250,1)', colorMuted: 'rgba(96,165,250,0.10)' },
+            { href: `mailto:${SUPPORT_EMAIL}`, icon: Mail, label: 'Email', desc: SUPPORT_EMAIL, color: 'rgba(251,191,36,1)', colorMuted: 'rgba(251,191,36,0.10)' },
           ].map(({ href, icon: Icon, label, desc, color, colorMuted }) => (
             <a key={label} href={href} target={href.startsWith('http') ? '_blank' : undefined} rel="noreferrer"
               className="contact-card flex flex-col items-center text-center p-9 transition-all duration-300"
               style={{
-                background: 'rgba(255,253,245,0.03)',
-                border: '1.5px solid rgba(200,184,232,0.12)',
-                borderRadius: '4px',
-                boxShadow: '3px 3px 0 rgba(200,184,232,0.05)',
+                background: 'rgba(120,100,200,0.05)',
+                border: '1.5px solid rgba(167,139,250,0.14)',
+                borderRadius: '8px',
+                boxShadow: '0 4px 24px rgba(0,0,0,0.35), 0 0 0 1px rgba(124,58,237,0.06)',
               }}
               onMouseEnter={e => {
                 const el = e.currentTarget as HTMLElement;
-                el.style.borderColor = color.replace('1)', '0.30)');
+                el.style.borderColor = color.replace('1)', '0.35)');
                 el.style.background = colorMuted;
-                el.style.boxShadow = `4px 4px 0 ${colorMuted}, 7px 7px 0 rgba(200,184,232,0.03)`;
-                el.style.transform = 'translate(-2px,-2px)';
+                el.style.boxShadow = `0 16px 40px rgba(0,0,0,0.45), 0 0 30px ${colorMuted}, 0 0 0 1px ${color.replace('1)', '0.25)')}`;
+                el.style.transform = 'perspective(800px) translateZ(8px) translateY(-4px)';
               }}
               onMouseLeave={e => {
                 const el = e.currentTarget as HTMLElement;
-                el.style.borderColor = 'rgba(200,184,232,0.12)';
-                el.style.background = 'rgba(255,253,245,0.03)';
-                el.style.boxShadow = '3px 3px 0 rgba(200,184,232,0.05)';
+                el.style.borderColor = 'rgba(167,139,250,0.14)';
+                el.style.background = 'rgba(120,100,200,0.05)';
+                el.style.boxShadow = '0 4px 24px rgba(0,0,0,0.35), 0 0 0 1px rgba(124,58,237,0.06)';
                 el.style.transform = '';
               }}>
               <div className="w-12 h-12 flex items-center justify-center mb-5 transition-transform duration-300"
                 style={{
-                  border: `1.5px solid ${color.replace('1)', '0.24)')}`,
-                  borderRadius: '3px',
+                  border: `1.5px solid ${color.replace('1)', '0.28)')}`,
+                  borderRadius: '6px',
                   background: colorMuted,
                   color: color,
-                  boxShadow: '2px 2px 0 rgba(200,184,232,0.08)',
+                  boxShadow: `0 0 16px ${colorMuted}, inset 0 1px 0 rgba(255,255,255,0.06)`,
                 }}>
                 <Icon className="w-5 h-5" />
               </div>
-              <h4 className="font-outfit text-[18px] font-bold mb-1.5 tracking-[-0.3px]" style={{ color: '#f0ede4' }}>{label}</h4>
-              <p className="text-[13px]" style={{ color: 'rgba(240,237,228,0.50)' }}>{desc}</p>
+              <h4 className="font-outfit text-[18px] font-bold mb-1.5 tracking-[-0.3px]" style={{ color: '#f0eeff' }}>{label}</h4>
+              <p className="text-[13px]" style={{ color: 'rgba(224,216,255,0.52)' }}>{desc}</p>
             </a>
           ))}
         </div>

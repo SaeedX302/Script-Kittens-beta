@@ -1,66 +1,135 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 
 interface Props {
   active: boolean;
 }
 
 export default function CustomCursor({ active }: Props) {
- const dotRef    = useRef<HTMLDivElement>(null);
-  const ringRef   = useRef<HTMLDivElement>(null);
-  const trailRef  = useRef<HTMLDivElement>(null);
-  const pos       = useRef({ x: -200, y: -200 });
-  const ring      = useRef({ x: -200, y: -200 });
-  const raf       = useRef<number>(0);
-  const [clicking, setClicking] = useState(false);
-  const [hovering, setHovering] = useState(false);
-  const [trailPos, setTrailPos] = useState({ x: -200, y: -200 });
+  const dotRef   = useRef<HTMLDivElement>(null);
+  const ringRef  = useRef<HTMLDivElement>(null);
+  const trailRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!active) return;
 
-    const onMove = (e: MouseEvent) => {
-      pos.current = { x: e.clientX, y: e.clientY };
-      setTrailPos({ x: e.clientX, y: e.clientY });
+    const pos  = { x: -200, y: -200 };
+    const ring = { x: -200, y: -200 };
+    let raf = 0;
+    let isHovering = false;
+    let isClicking = false;
 
-      // Dot & trail snap instantly
+    // ── Pure DOM setters (no React state) ────────────────────────────────
+    const applyRingStyle = () => {
+      const el = ringRef.current;
+      if (!el) return;
+      const size = isClicking ? '28px' : isHovering ? '52px' : '38px';
+      el.style.width  = size;
+      el.style.height = size;
+      el.style.opacity = isClicking ? '0.5' : '1';
+      el.style.borderColor = isHovering ? 'rgba(167,139,250,0.9)' : 'rgba(52,211,153,0.7)';
+      el.style.boxShadow   = isHovering
+        ? '0 0 14px 3px rgba(124,58,237,0.40), inset 0 0 8px rgba(167,139,250,0.18)'
+        : '0 0 10px 2px rgba(52,211,153,0.28), inset 0 0 6px rgba(52,211,153,0.12)';
+    };
+
+    const applyDotStyle = () => {
+      const el = dotRef.current;
+      if (!el) return;
+      const size = isClicking ? '3px' : isHovering ? '6px' : '5px';
+      el.style.width  = size;
+      el.style.height = size;
+      el.style.background = isHovering ? 'rgba(167,139,250,1)' : 'rgba(52,211,153,1)';
+      el.style.boxShadow  = isHovering
+        ? '0 0 10px 3px rgba(124,58,237,0.85)'
+        : '0 0 8px 2px rgba(52,211,153,0.75)';
+    };
+
+    const applyTrailStyle = () => {
+      const el = trailRef.current;
+      if (!el) return;
+      el.style.opacity = isClicking ? '0.55' : '0';
+    };
+
+    // ── Mouse move — snap dot + trail, detect hover ───────────────────────
+    const onMove = (e: MouseEvent) => {
+      pos.x = e.clientX;
+      pos.y = e.clientY;
+
+      // Dot snaps instantly (GPU transform only)
       if (dotRef.current) {
-        dotRef.current.style.transform = `translate(${e.clientX}px, ${e.clientY}px) translate(-50%,-50%)`;
+        dotRef.current.style.transform = `translate(${e.clientX}px,${e.clientY}px) translate(-50%,-50%)`;
       }
       if (trailRef.current) {
-        trailRef.current.style.transform = `translate(${e.clientX}px, ${e.clientY}px) translate(-50%,-50%)`;
+        trailRef.current.style.transform = `translate(${e.clientX}px,${e.clientY}px) translate(-50%,-50%)`;
       }
 
-      // Detect hoverable elements
+      // Hover detection — only update style if state changed
       const el = document.elementFromPoint(e.clientX, e.clientY);
-      const isHover = !!(el?.closest('a, button, [role="button"], input, textarea, select, label'));
-      setHovering(isHover);
-    };
-
-    const onDown = () => setClicking(true);
-    const onUp   = () => setClicking(false);
-
-    // Smooth ring follow via rAF
-    const animate = () => {
-      ring.current.x += (pos.current.x - ring.current.x) * 0.12;
-      ring.current.y += (pos.current.y - ring.current.y) * 0.12;
-      if (ringRef.current) {
-        ringRef.current.style.transform = `translate(${ring.current.x}px, ${ring.current.y}px) translate(-50%,-50%)`;
+      const nowHovering = !!(el?.closest('a,button,[role="button"],input,textarea,select,label,[tabindex]:not([tabindex="-1"])'));
+      if (nowHovering !== isHovering) {
+        isHovering = nowHovering;
+        applyRingStyle();
+        applyDotStyle();
       }
-      raf.current = requestAnimationFrame(animate);
     };
-    raf.current = requestAnimationFrame(animate);
 
-    window.addEventListener('mousemove', onMove);
-    window.addEventListener('mousedown', onDown);
-    window.addEventListener('mouseup', onUp);
+    const onDown = () => {
+      isClicking = true;
+      applyRingStyle();
+      applyDotStyle();
+      applyTrailStyle();
+    };
+    const onUp = () => {
+      isClicking = false;
+      applyRingStyle();
+      applyDotStyle();
+      applyTrailStyle();
+    };
+
+    // ── Ring follows with lerp via rAF ─────────────────────────────────────
+    const animate = () => {
+      ring.x += (pos.x - ring.x) * 0.22;  // 0.22 = snappy but still smooth
+      ring.y += (pos.y - ring.y) * 0.22;
+      if (ringRef.current) {
+        ringRef.current.style.transform = `translate(${ring.x}px,${ring.y}px) translate(-50%,-50%)`;
+      }
+      raf = requestAnimationFrame(animate);
+    };
+    raf = requestAnimationFrame(animate);
+
+    // Init styles with off-screen position so there's no flash at (0,0)
+    if (dotRef.current)   dotRef.current.style.transform   = 'translate(-9999px,-9999px) translate(-50%,-50%)';
+    if (trailRef.current) trailRef.current.style.transform = 'translate(-9999px,-9999px) translate(-50%,-50%)';
+    if (ringRef.current)  ringRef.current.style.transform  = 'translate(-9999px,-9999px) translate(-50%,-50%)';
+    applyRingStyle();
+    applyDotStyle();
+    applyTrailStyle();
+
+    // Reset clicking state when the pointer is cancelled (e.g. touch stolen by
+    // scroll) or the window loses focus, so the cursor never stays "pressed".
+    const onCancel = () => {
+      if (!isClicking) return;
+      isClicking = false;
+      applyRingStyle();
+      applyDotStyle();
+      applyTrailStyle();
+    };
+
+    window.addEventListener('mousemove',    onMove,   { passive: true });
+    window.addEventListener('mousedown',    onDown);
+    window.addEventListener('mouseup',      onUp);
+    window.addEventListener('pointercancel', onCancel);
+    window.addEventListener('blur',          onCancel);
 
     return () => {
-      window.removeEventListener('mousemove', onMove);
-      window.removeEventListener('mousedown', onDown);
-      window.removeEventListener('mouseup', onUp);
-      cancelAnimationFrame(raf.current);
+      window.removeEventListener('mousemove',    onMove);
+      window.removeEventListener('mousedown',    onDown);
+      window.removeEventListener('mouseup',      onUp);
+      window.removeEventListener('pointercancel', onCancel);
+      window.removeEventListener('blur',          onCancel);
+      cancelAnimationFrame(raf);
     };
   }, [active]);
 
@@ -68,44 +137,14 @@ export default function CustomCursor({ active }: Props) {
 
   return (
     <>
-      {/* Outer glow ring — lags behind */}
-      <div
-        ref={ringRef}
-        className="custom-cursor-ring"
-        style={{
-          width:  hovering ? '52px' : clicking ? '28px' : '38px',
-          height: hovering ? '52px' : clicking ? '28px' : '38px',
-          opacity: clicking ? 0.5 : 1,
-          borderColor: hovering ? 'rgba(200,184,232,0.9)' : 'rgba(168,220,200,0.7)',
-          boxShadow: hovering
-            ? '0 0 14px 3px rgba(200,184,232,0.35), inset 0 0 8px rgba(200,184,232,0.15)'
-            : '0 0 10px 2px rgba(168,220,200,0.25), inset 0 0 6px rgba(168,220,200,0.10)',
-        }}
-      />
+      {/* Outer glow ring — lerp-follows cursor */}
+      <div ref={ringRef} className="custom-cursor-ring" />
 
       {/* Inner dot — snaps instantly */}
-      <div
-        ref={dotRef}
-        className="custom-cursor-dot"
-        style={{
-          width:  hovering ? '6px' : clicking ? '3px' : '5px',
-          height: hovering ? '6px' : clicking ? '3px' : '5px',
-          background: hovering ? 'rgba(200,184,232,1)' : 'rgba(168,220,200,1)',
-          boxShadow: hovering
-            ? '0 0 10px 3px rgba(200,184,232,0.8)'
-            : '0 0 8px 2px rgba(168,220,200,0.7)',
-        }}
-      />
+      <div ref={dotRef} className="custom-cursor-dot" />
 
-      {/* Click ripple trail */}
-      <div
-        ref={trailRef}
-        className="custom-cursor-trail"
-        style={{
-          opacity: clicking ? 0.55 : 0,
-          transform: `translate(${trailPos.x}px, ${trailPos.y}px) translate(-50%,-50%)`,
-        }}
-      />
+      {/* Click ripple */}
+      <div ref={trailRef} className="custom-cursor-trail" />
     </>
   );
 }

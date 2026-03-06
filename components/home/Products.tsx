@@ -13,9 +13,9 @@ const products = [
     type: 'EXTERNAL',
     badge: 'BEST SELLER',
     icon: Crown,
-    accentColor: 'rgba(200,184,232,1)',
-    accentMuted: 'rgba(200,184,232,0.12)',
-    accentBorder: 'rgba(200,184,232,0.24)',
+    accentColor: 'rgba(167,139,250,1)',
+    accentMuted: 'rgba(167,139,250,0.12)',
+    accentBorder: 'rgba(167,139,250,0.28)',
     features: [
       { icon: Crosshair, text: 'Aimbot Suite (Head, Neck, Body, Drag)' },
       { icon: Eye, text: 'ESP & Chams (Box, RGB, Moco)' },
@@ -33,9 +33,9 @@ const products = [
     type: 'INTERNAL',
     badge: 'ADVANCED',
     icon: Cpu,
-    accentColor: 'rgba(168,200,232,1)',
-    accentMuted: 'rgba(168,200,232,0.12)',
-    accentBorder: 'rgba(168,200,232,0.24)',
+    accentColor: 'rgba(96,165,250,1)',
+    accentMuted: 'rgba(96,165,250,0.12)',
+    accentBorder: 'rgba(96,165,250,0.28)',
     features: [
       { icon: Crosshair, text: 'Silent Aim & Head Rotation' },
       { icon: Zap, text: 'Teleport, Speed Hack, Fly' },
@@ -54,9 +54,9 @@ const products = [
     type: 'EXTERNAL CODES',
     badge: 'BEST VALUE',
     icon: Code,
-    accentColor: 'rgba(232,196,168,1)',
-    accentMuted: 'rgba(232,196,168,0.12)',
-    accentBorder: 'rgba(232,196,168,0.24)',
+    accentColor: 'rgba(251,191,36,1)',
+    accentMuted: 'rgba(251,191,36,0.12)',
+    accentBorder: 'rgba(251,191,36,0.28)',
     features: [
       { icon: Crosshair, text: 'Aimbot x64 & x86' },
       { icon: MapPin, text: 'Sniper & Ammo Location' },
@@ -71,9 +71,9 @@ const products = [
     type: 'API SERVICES',
     badge: 'DEVELOPERS',
     icon: Server,
-    accentColor: 'rgba(168,220,200,1)',
-    accentMuted: 'rgba(168,220,200,0.12)',
-    accentBorder: 'rgba(168,220,200,0.24)',
+    accentColor: 'rgba(52,211,153,1)',
+    accentMuted: 'rgba(52,211,153,0.12)',
+    accentBorder: 'rgba(52,211,153,0.28)',
     features: [
       { icon: Plug, text: 'Player Info & Like API' },
       { icon: Mail, text: 'Friend Request Spam API' },
@@ -83,6 +83,22 @@ const products = [
     prices: [{ label: 'STARTING FROM', value: '$1', suffix: '/endpoint', featured: true, large: true }],
   },
 ];
+
+const handleTilt = (e: React.MouseEvent<HTMLElement>) => {
+  const el = e.currentTarget as HTMLElement;
+  // Disable transform transitions while actively tracking so updates are immediate
+  el.classList.add('tilting');
+  const rect = el.getBoundingClientRect();
+  const x = ((e.clientX - rect.left) / rect.width  - 0.5) * 12;
+  const y = ((e.clientY - rect.top)  / rect.height - 0.5) * -12;
+  el.style.transform = `perspective(900px) rotateX(${y}deg) rotateY(${x}deg) translateZ(10px)`;
+};
+const resetTilt = (e: React.MouseEvent<HTMLElement>) => {
+  const el = e.currentTarget as HTMLElement;
+  // Re-enable transitions so the reset animates smoothly
+  el.classList.remove('tilting');
+  el.style.transform = '';
+};
 
 export default function Products() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -114,30 +130,31 @@ export default function Products() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
           {products.map((product) => (
-            <div key={product.id} className="product-card relative flex flex-col transition-all duration-300"
+            <div key={product.id} className="product-card relative flex flex-col"
               style={{
-                background: 'rgba(255,253,245,0.03)',
-                border: '1.5px solid rgba(200,184,232,0.12)',
-                borderRadius: '4px',
-                boxShadow: '3px 3px 0 rgba(200,184,232,0.05), 5px 5px 0 rgba(200,184,232,0.025)',
+                background: 'rgba(120,100,200,0.06)',
+                border: '1.5px solid rgba(167,139,250,0.14)',
+                borderRadius: '10px',
+                boxShadow: '0 4px 24px rgba(0,0,0,0.35), 0 0 0 1px rgba(124,58,237,0.06)',
+                transition: 'border-color 0.3s ease, background 0.3s ease, box-shadow 0.3s ease, transform 0.35s ease',
               }}
+              onMouseMove={handleTilt}
               onMouseEnter={e => {
                 const el = e.currentTarget as HTMLElement;
                 el.style.borderColor = product.accentBorder;
-                el.style.background = product.accentMuted;
-                el.style.boxShadow = `4px 4px 0 ${product.accentMuted}, 7px 7px 0 rgba(200,184,232,0.03)`;
-                el.style.transform = 'translate(-2px,-2px)';
+                el.style.background = `rgba(120,100,200,0.10)`;
+                el.style.boxShadow = `0 16px 48px rgba(0,0,0,0.50), 0 0 30px ${product.accentMuted}, 0 0 0 1px ${product.accentBorder}`;
               }}
               onMouseLeave={e => {
                 const el = e.currentTarget as HTMLElement;
-                el.style.borderColor = 'rgba(200,184,232,0.12)';
-                el.style.background = 'rgba(255,253,245,0.03)';
-                el.style.boxShadow = '3px 3px 0 rgba(200,184,232,0.05), 5px 5px 0 rgba(200,184,232,0.025)';
-                el.style.transform = '';
+                el.style.borderColor = 'rgba(167,139,250,0.14)';
+                el.style.background = 'rgba(120,100,200,0.06)';
+                el.style.boxShadow = '0 4px 24px rgba(0,0,0,0.35), 0 0 0 1px rgba(124,58,237,0.06)';
+                resetTilt(e);
               }}>
 
-              {/* Top chalk accent */}
-              <div className="h-[2px]" style={{ background: `linear-gradient(90deg, ${product.accentColor.replace('1)', '0.55)')}, transparent)` }} />
+              {/* Top neon accent */}
+              <div className="h-[2px] rounded-t-[10px]" style={{ background: `linear-gradient(90deg, ${product.accentColor.replace('1)', '0.70)')}, transparent)`, boxShadow: `0 0 8px ${product.accentColor.replace('1)', '0.40)')}` }} />
 
               <div className="p-7 flex-1 flex flex-col relative z-10">
                 {/* Header */}
@@ -145,10 +162,10 @@ export default function Products() {
                   <div className="w-12 h-12 flex items-center justify-center"
                     style={{
                       border: `1.5px solid ${product.accentBorder}`,
-                      borderRadius: '3px',
+                      borderRadius: '8px',
                       background: product.accentMuted,
                       color: product.accentColor,
-                      boxShadow: '2px 2px 0 rgba(200,184,232,0.08)',
+                      boxShadow: `0 0 14px ${product.accentColor.replace('1)', '0.20)')}`,
                     }}>
                     <product.icon className="w-5 h-5" />
                   </div>
@@ -161,7 +178,7 @@ export default function Products() {
                     }}>{product.badge}</span>
                 </div>
 
-                <h3 className="font-outfit text-[19px] font-bold mb-1 tracking-[-0.4px]" style={{ color: '#f0ede4' }}>
+                <h3 className="font-outfit text-[19px] font-bold mb-1 tracking-[-0.4px]" style={{ color: '#f0eeff' }}>
                   {product.title}
                 </h3>
                 <span className="font-jetbrains-mono text-[9px] font-bold tracking-[2.5px] mb-6 block"
@@ -172,10 +189,10 @@ export default function Products() {
                   {product.features.map((feat, i) => (
                     <div key={i} className="flex items-center gap-3 px-3 py-2.5 transition-all duration-200"
                       style={{
-                        background: 'rgba(255,253,245,0.02)',
-                        border: '1px solid rgba(200,184,232,0.08)',
-                        borderRadius: '3px',
-                        color: 'rgba(240,237,228,0.65)',
+                        background: 'rgba(120,100,200,0.04)',
+                        border: '1px solid rgba(167,139,250,0.10)',
+                        borderRadius: '6px',
+                        color: 'rgba(224,216,255,0.65)',
                         fontSize: '12.5px',
                       }}>
                       <feat.icon className="w-3.5 h-3.5 shrink-0" style={{ color: product.accentColor }} />
@@ -189,22 +206,22 @@ export default function Products() {
                   {product.prices.map((price, i) => (
                     <div key={i} className="flex-1 flex flex-col items-center justify-center p-3 transition-all duration-300"
                       style={{
-                        border: `1.5px solid ${price.featured ? product.accentBorder : 'rgba(200,184,232,0.10)'}`,
-                        borderRadius: '3px',
-                        background: price.featured ? product.accentMuted : 'rgba(255,253,245,0.02)',
-                        boxShadow: price.featured ? `2px 2px 0 ${product.accentMuted}` : 'none',
+                        border: `1.5px solid ${price.featured ? product.accentBorder : 'rgba(167,139,250,0.14)'}`,
+                        borderRadius: '7px',
+                        background: price.featured ? product.accentMuted : 'rgba(120,100,200,0.04)',
+                        boxShadow: price.featured ? `0 0 16px ${product.accentColor.replace('1)', '0.15)')}` : 'none',
                       }}>
                       <span className="font-jetbrains-mono text-[9px] font-bold tracking-[1.5px] mb-1"
-                        style={{ color: price.featured ? product.accentColor : 'rgba(240,237,228,0.35)' }}>
+                        style={{ color: price.featured ? product.accentColor : 'rgba(224,216,255,0.40)' }}>
                         {price.label}
                       </span>
                       <span className="font-outfit text-[18px] font-extrabold"
-                        style={{ color: price.featured ? product.accentColor : 'rgba(240,237,228,0.70)' }}>
+                        style={{ color: price.featured ? product.accentColor : 'rgba(224,216,255,0.75)' }}>
                         {price.value}
                       </span>
                       {'suffix' in price && price.suffix && (
                         <span className="font-jetbrains-mono text-[9px]"
-                          style={{ color: 'rgba(240,237,228,0.35)' }}>{price.suffix}</span>
+                          style={{ color: 'rgba(224,216,255,0.40)' }}>{price.suffix}</span>
                       )}
                     </div>
                   ))}
